@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from bcrypt import hashpw, gensalt, checkpw
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from utils.db import add_user, find_user
 import os
 
 app = Flask(__name__)
+CORS(app)
+
+# Configure JWT
+app.config['JWT_SECRET_KEY'] = 'your_jwt_secret'
+jwt = JWTManager(app)
 
 # User Registration
 @app.route('/register', methods=['POST'])
@@ -45,4 +51,4 @@ def profile():
     return jsonify({"message": "Profile data", "user": current_user})
 
 if __name__ == 'main':
-    app.run(debug=True)
+    app.run(debug=True) 
