@@ -50,5 +50,7 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Profile data", "user": current_user})
 
+    
+
 if __name__ == 'main':
     app.run(debug=True) 
