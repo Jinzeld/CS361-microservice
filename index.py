@@ -9,11 +9,11 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Configure JWT
-
+# Load environment variables
 load_dotenv()  # Loads the environment variables from the .env file
 
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+# Configure JWT
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  # JWT secret key loaded from .env
 jwt = JWTManager(app)
 
 # User Registration
@@ -58,11 +58,7 @@ def profile():
 def handler(event, context):
     return app(event, context)
 
+# Home route for testing
 @app.route('/')
 def home():
     return "Welcome to the User Authentication API"
-
-
-# Vercel-specific handler
-if __name__ == '__main__':
-    app.run()
