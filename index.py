@@ -1,58 +1,44 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from bcrypt import hashpw, gensalt, checkpw
-from utils.db import add_user, find_user
 import os
 
 app = Flask(__name__)
-CORS(app)
 
-# Configure JWT
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret'
-jwt = JWTManager(app)
+#In-memory storage for images
+image_storage = {}
 
-# User Registration
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.json
-    username = data.get('username')
-    password = data.get('password')
+#Upload image endpoint
+@app.route('/upload_image', methods=['POST'])
+def upload_image():
+    event_id = request.form.get('event_id')
+    image_file = request.files.get('image')
 
-    if not username or not password:
-        return jsonify({"message": "Username and password required"}), 400
-    
-    if find_user(username):
-        return jsonify({"message": "User already exists"}), 400
+    if not event_id or not image_file:
+        return jsonify({"error": "missing event_id and image"}), 404
 
-    hashed_password = hashpw(password.encode('utf-8'), gensalt())
-    add_user({"username": username, "password": hashed_password})
-    return jsonify({"message": "User registered successfully"}), 201
+    # Save the image
+    image_storage[event_id] = image_file.read()
+    return jsonify({"image_url": f"https://cs-361-micro-a.vercel.app/get_image?event_id={event_id}"}), 200
 
-# User Login
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    username = data.get('username')
-    password = data.get('password')
+#Get image endpoint
+@app.route('/get_image', methods=['GET'])
+def get_image():
+    event_id = request.args.get('event_id')
 
-    user = find_user(username)
-    if not user or not checkpw(password.encode('utf-8'), user['password']):
-        return jsonify({"message": "Invalid credentials"}), 401
+    if event_id not in image_storage:
+        return jsonify({"error": "Image not found"}), 404
 
-    token = create_access_token(identity=username)
-    return jsonify({"message": "Login successful", "token": token})
+    return jsonify({"image_url": f"https://cs-361-micro-a.vercel.app/get_image?event_id={event_id}"}), 200
 
-# Protected Profile Route
-@app.route('/profile', methods=['GET'])
-@jwt_required()
-def profile():
-    current_user = get_jwt_identity()
-    return jsonify({"message": "Profile data", "user": current_user})
+#Remove image endpoint
+@app.route('/remove_image', methods=['POST'])
+def remove_image():
+    event_id = request.form.get('event_id')
 
-# Vercel handler
-def handler(event, context):
-    return app(event, context)
+    if event_id not in image_storage:
+        return jsonify({"error": "Image not found"}), 404
 
-if __name__ == '__main__':
+    del image_storage[event_id]
+    return jsonify({"message": "Image removed successfully"}), 200
+
+if __name__ == 'main':
     app.run(debug=True)
