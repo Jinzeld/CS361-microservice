@@ -3,13 +3,17 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bcrypt import hashpw, gensalt, checkpw
 from utils.db import add_user, find_user
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
 CORS(app)
 
 # Configure JWT
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your_jwt_secret')  # Use env var for better security
+
+load_dotenv()  # Loads the environment variables from the .env file
+
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)
 
 # User Registration
@@ -21,7 +25,7 @@ def register():
 
     if not username or not password:
         return jsonify({"message": "Username and password required"}), 400
-    
+
     if find_user(username):
         return jsonify({"message": "User already exists"}), 400
 
@@ -50,10 +54,15 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Profile data", "user": current_user})
 
-# Vercel handler (entry point)
-def handler(request):
-    # This will properly handle the requests by Vercel
-    return app(request)
+# Vercel handler
+def handler(event, context):
+    return app(event, context)
 
+@app.route('/')
+def home():
+    return "Welcome to the User Authentication API"
+
+
+# Vercel-specific handler
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
