@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Flask API on Vercel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .response {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f4f4f4;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test Flask API on Vercel</h1>
+
+    <!-- Register Form -->
+    <div class="form-group">
+      <h2>Register</h2>
+      <label for="register-username">Username:</label>
+      <input type="text" id="register-username" placeholder="Enter username">
+      <label for="register-password">Password:</label>
+      <input type="password" id="register-password" placeholder="Enter password">
+      <button onclick="register()">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-group">
+      <h2>Login</h2>
+      <label for="login-username">Username:</label>
+      <input type="text" id="login-username" placeholder="Enter username">
+      <label for="login-password">Password:</label>
+      <input type="password" id="login-password" placeholder="Enter password">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Profile -->
+    <div class="form-group">
+      <h2>Profile</h2>
+      <button onclick="getProfile()">Get Profile</button>
+    </div>
+
+    <!-- Logout -->
+    <div class="form-group">
+      <h2>Logout</h2>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- API Response -->
+    <div class="response">
+      <h3>API Response:</h3>
+      <pre id="api-response"></pre>
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = 'https://your-vercel-url'; // Replace with your Vercel URL
+
+    // Display API response
+    function displayResponse(data) {
+      document.getElementById('api-response').textContent = JSON.stringify(data, null, 2);
+    }
+
+    // Register a new user
+    async function register() {
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+
+      const response = await fetch(`${apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      displayResponse(data);
+    }
+
+    // Log in an existing user
+    async function login() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+
+      const response = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include', // Include cookies for session management
+      });
+
+      const data = await response.json();
+      displayResponse(data);
+    }
+
+    // Get the user's profile
+    async function getProfile() {
+      const response = await fetch(`${apiUrl}/profile`, {
+        method: 'GET',
+        credentials: 'include', // Include cookies for session management
+      });
+
+      const data = await response.json();
+      displayResponse(data);
+    }
+
+    // Log out the user
+    async function logout() {
+      const response = await fetch(`${apiUrl}/logout`, {
+        method: 'POST',
+        credentials: 'include', // Include cookies for session management
+      });
+
+      const data = await response.json();
+      displayResponse(data);
+    }
+  </script>
+</body>
+</html>
