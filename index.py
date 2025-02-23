@@ -1,6 +1,5 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bcrypt import hashpw, gensalt, checkpw
 from utils.db import add_user, find_user
 from dotenv import load_dotenv
@@ -12,9 +11,8 @@ CORS(app)
 # Load environment variables
 load_dotenv()  # Loads the environment variables from the .env file
 
-# Configure JWT
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  # JWT secret key loaded from .env
-jwt = JWTManager(app)
+# Configure a secret key for sessions
+app.secret_key = os.getenv('SECRET_KEY')  # Secret key loaded from .env
 
 # User Registration
 @app.route('/register', methods=['POST'])
@@ -44,15 +42,26 @@ def login():
     if not user or not checkpw(password.encode('utf-8'), user['password']):
         return jsonify({"message": "Invalid credentials"}), 401
 
-    token = create_access_token(identity=username)
-    return jsonify({"message": "Login successful", "token": token})
+    # Store the username in the session to indicate the user is logged in
+    session['username'] = username
+    return jsonify({"message": "Login successful"})
 
 # Protected Profile Route
 @app.route('/profile', methods=['GET'])
-@jwt_required()
 def profile():
-    current_user = get_jwt_identity()
+    # Check if the user is logged in by verifying the session
+    if 'username' not in session:
+        return jsonify({"message": "Unauthorized"}), 401
+
+    current_user = session['username']
     return jsonify({"message": "Profile data", "user": current_user})
+
+# User Logout
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Remove the username from the session
+    session.pop('username', None)
+    return jsonify({"message": "Logout successful"})
 
 # Home route for testing
 @app.route('/')
