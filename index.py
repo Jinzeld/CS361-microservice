@@ -54,11 +54,15 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Profile data", "user": current_user})
 
-# Vercel handler
-def handler(event, context):
-    return app(event, context)
-
 # Home route for testing
 @app.route('/')
 def home():
     return "Welcome to the User Authentication API"
+
+# Vercel handler
+def handler(event, context):
+    return app(event, context)
+
+# This is required for Vercel to recognize the app
+if __name__ == '__main__':
+    app.run(debug=True)
