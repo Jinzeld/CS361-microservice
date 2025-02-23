@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Configure JWT
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your_jwt_secret')  # Use env var for better security
 jwt = JWTManager(app)
 
 # User Registration
@@ -50,9 +50,10 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Profile data", "user": current_user})
 
-# Vercel handler
-def handler(event, context):
-    return app(event, context)
+# Vercel handler (entry point)
+def handler(request):
+    # This will properly handle the requests by Vercel
+    return app(request)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

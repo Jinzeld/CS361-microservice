@@ -1,12 +1,12 @@
 {
     "version": 2,
     "builds": [
-      { "src": "app.py", "use": "@vercel/python" }
+      { "src": "index.py", "use": "@vercel/python" }
     ],
     "routes": [
-      { "src": "/register", "dest": "app.py" },
-      { "src": "/login", "dest": "app.py" },
-      { "src": "/profile", "dest": "app.py" }
+      { "src": "/register", "dest": "index.py" },
+      { "src": "/login", "dest": "index.py" },
+      { "src": "/profile", "dest": "index.py" }
     ]
   }
   
