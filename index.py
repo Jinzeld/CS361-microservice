@@ -3,13 +3,17 @@ from flask_cors import CORS
 from bcrypt import hashpw, gensalt, checkpw
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from utils.db import add_user, find_user
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
 CORS(app)
 
+# Load environment variables
+load_dotenv()  # Loads the environment variables from the .env file
+
 # Configure JWT
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  # JWT secret key loaded from .env
 jwt = JWTManager(app)
 
 # User Registration
