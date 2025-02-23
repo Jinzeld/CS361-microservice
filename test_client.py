@@ -1,29 +1,54 @@
 import requests
 
-BASE_URL = "https://your-vercel-deployment-url"
+BASE_URL = "http://127.0.0.1:5000"
 
 def test_register():
-    response = requests.post(f"{BASE_URL}/register", json={
-        "username": "testUser",
+    url = f"{BASE_URL}/register"
+    payload = {
+        "username": "testuser",
         "password": "password123"
-    })
-    print("Register:", response.json())
+    }
+    response = requests.post(url, json=payload)
+    
+    print("Status Code:", response.status_code)
+    print("Response Text:", response.text)
+    
+    try:
+        print("Register:", response.json())
+    except requests.exceptions.JSONDecodeError as e:
+        print("Failed to parse JSON response:", e)
 
 def test_login():
-    response = requests.post(f"{BASE_URL}/login", json={
-        "username": "testUser",
+    url = f"{BASE_URL}/login"
+    payload = {
+        "username": "testuser",
         "password": "password123"
-    })
-    data = response.json()
-    print("Login:", data)
+    }
+    response = requests.post(url, json=payload)
     
-    if "token" in data:
-        token = data["token"]
-        profile_response = requests.get(f"{BASE_URL}/profile", headers={
-            "Authorization": f"Bearer {token}"
-        })
-        print("Profile:", profile_response.json())
+    print("Status Code:", response.status_code)
+    print("Response Text:", response.text)
+    
+    try:
+        print("Login:", response.json())
+    except requests.exceptions.JSONDecodeError as e:
+        print("Failed to parse JSON response:", e)
 
-if __name__ == "__main__":
-    test_register()
-    test_login()
+def test_profile(token):
+    url = f"{BASE_URL}/profile"
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    response = requests.get(url, headers=headers)
+    
+    print("Status Code:", response.status_code)
+    print("Response Text:", response.text)
+    
+    try:
+        print("Profile:", response.json())
+    except requests.exceptions.JSONDecodeError as e:
+        print("Failed to parse JSON response:", e)
+
+# Run the tests
+test_register()
+test_login()
