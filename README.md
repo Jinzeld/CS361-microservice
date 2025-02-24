@@ -1,5 +1,8 @@
 # User Authentication Microservice
 
+### **Author:** Jinhui Zhen
+### **Designed for:** Poojan
+
 ## Overview
 This microservice provides a user authentication system using Flask, enabling:
 - **User Registration:** Allows new users to sign up with a username and password.
@@ -11,6 +14,9 @@ The communication between the client and the microservice is handled through a *
 ---
 
 ## Communication Contract
+
+**Base URL:** `https://cs-361-microservice-a.vercel.app/` 
+- **Note:** This microservice is hosted on Vercel. Replace http://localhost:5000 with `https://cs-361-microservice-a.vercel.app/` 
 
 ### 1. **User Registration**
 #### **Endpoint:** `/register`  
@@ -108,22 +114,30 @@ print("Response Text:", response.json())
 ```
 
 ## UML Sequence Diagram
-<img src="https://github.com/user-attachments/assets/578fa3be-ecee-46a4-baa7-5950eefd5101" width="500px" height="550px">
 
 
 
 ## Deployment
 
-```
-This microservice is hosted on Vercel. Replace http://localhost:5000 with your deployed Vercel URL when making requests in production.
-```
+This microservice is hosted on Vercel. Replace http://localhost:5000 with `https://cs-361-microservice-a.vercel.app/` 
+
 
 ## Additional Notes
 
-```
-Environment Variables: Set JWT_SECRET_KEY in a .env file for local development and in Vercel's environment variables for production.
 
-Ensure your teammate writes their own code to make requests, using only the provided communication contract as a reference.
+`Environment Variables: Set JWT_SECRET_KEY in a .env file for local development and in Vercel's environment variables for production.`
+
+#### To setup the .env make a copy of the .env.example using the command below:
+#### MacOS & Linux
+```bash
+cp .env.example .env
 ```
+#### Windows
+```powershell
+copy .env.example .env
+```
+
+#### Run the generate_JWT_token.py to generate the JWT token and paste it in the .env file
+
 
 
