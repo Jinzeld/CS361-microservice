@@ -57,9 +57,8 @@ def profile():
 # Home route for testing
 @app.route('/')
 def home():
-    return "Welcome to the User Authentication Microservice"
+    return "Welcome to the User Authentication Microservice, \n Please copy the page URL and run it on your Test Program"
 
-    
 
 if __name__ == 'main':
     app.run(debug=True) 
