@@ -108,7 +108,7 @@ print("Response Text:", response.json())
 ```
 
 ## UML Sequence Diagram
-![image](https://github.com/user-attachments/assets/578fa3be-ecee-46a4-baa7-5950eefd5101)
+<img src="https://github.com/user-attachments/assets/578fa3be-ecee-46a4-baa7-5950eefd5101" width="100px" height="100px">
 
 
 
