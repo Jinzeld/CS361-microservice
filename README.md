@@ -11,12 +11,19 @@ This microservice provides a user authentication system using Flask, enabling:
 
 The communication between the client and the microservice is handled through a **REST API** using **HTTP POST** and **GET** requests. JSON Web Tokens (**JWT**) are used for secure authentication.
 
+To interact with the microservice, your program must send HTTP requests to the appropriate endpoints.
+
 ---
 
 ## Communication Contract
 
-**Base URL:** `https://cs-361-microservice-a.vercel.app/` 
-- **Note:** This microservice is hosted on Vercel. Replace http://localhost:5000 with `https://cs-361-microservice-a.vercel.app/` 
+**Base URL:** 
+```
+https://cs-361-microservice-a.vercel.app/
+``` 
+- **Note:** This microservice is hosted on Vercel. Replace `http://localhost:5000` with `https://cs-361-microservice-a.vercel.app/` 
+
+
 
 ### 1. **User Registration**
 #### **Endpoint:** `/register`  
@@ -114,16 +121,15 @@ print("Response Text:", response.json())
 ```
 
 ## UML Sequence Diagram
-
+<img src="https://github.com/user-attachments/assets/578fa3be-ecee-46a4-baa7-5950eefd5101" width="500px" height="550px">
 
 
 ## Deployment
 
-This microservice is hosted on Vercel. Replace http://localhost:5000 with `https://cs-361-microservice-a.vercel.app/` 
+This microservice is hosted on Vercel. Replace `http://localhost:5000` with `https://cs-361-microservice-a.vercel.app/` 
 
 
 ## Additional Notes
-
 
 `Environment Variables: Set JWT_SECRET_KEY in a .env file for local development and in Vercel's environment variables for production.`
 
