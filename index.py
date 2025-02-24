@@ -54,6 +54,11 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Profile data", "user": current_user})
 
+# Home route for testing
+@app.route('/')
+def home():
+    return "Welcome to the User Authentication Microservice"
+
     
 
 if __name__ == 'main':
