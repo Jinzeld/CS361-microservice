@@ -1,4 +1,4 @@
-# User Authentication Microservice
+# CS361 Microsservice A: User Registration, User Login, User Authization
 
 ### **Author:** Jinhui Zhen
 ### **Designed for:** Poojan
