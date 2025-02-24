@@ -131,6 +131,8 @@ This microservice is hosted on Vercel. Replace `http://localhost:5000` with `htt
 
 ## Additional Notes
 
+### For local use only 
+
 `Environment Variables: Set JWT_SECRET_KEY in a .env file for local development and in Vercel's environment variables for production.`
 
 #### To setup the .env make a copy of the .env.example using the command below:
